@@ -1,0 +1,33 @@
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="page-header">Incidents</h2>
+        <div clas"table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><%= link_to "Subject", :sort => "subject" %></th>
+                        <th><%= link_to "Description", :sort => "description" %></th>
+                        <th><%= link_to "Responsible", :sort => "responsible" %></th>
+                        <th><%= link_to "Type of Incident", :sort => "type_of_incident" %></th>
+                        <th><%= link_to "Priority", :sort => "priority" %></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    <tr>
+                </thead>
+                <tbody>
+                 <% for incident in @incident %>
+                  <tr>
+                    <td><%= incident.subject %></td>
+                    <td><%= incident.description %></td>
+                    <td><%= incident.responsible %></td>
+                    <td><%= incident.type_of_incident %></td>
+                    <td><%= incident.priority %></td>
+                    <td ><button class="btn btn-success"><%= link_to 'Show', incident %></button></td>
+                    <td ><button class="btn btn-default btn-xs"><%= link_to 'Edit', edit_incident_path(incident) %></button></td>
+                    <td ><button class="btn btn-xs btn-danger"><%= link_to 'Destroy', incident, method: :delete, data: { confirm: 'Are you sure?' } %></button></td>
+                  </tr>
+                <% end %>
+                </tbody>
+            </table>
+        </div>
+        </div>

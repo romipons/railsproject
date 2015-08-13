@@ -1,0 +1,139 @@
+
+ <h1>Graphics</h1>
+<div class="row">
+ <div class="span6" id="chart1"><h2>Discriminate by priority</h2></div>
+ <div class="span6" id="chart2"><h2>Discriminate by type of incident</h2></div>
+</div>
+
+<% cant=[0,0,0,0,0,0,0,0,0,0]%>
+ <% for i_p1 in @prio1 %>
+ <%cant[0]+=1 %>
+ <%end%>
+ <% for i_p2 in @prio2 %>
+ <%cant[1]+=1 %>
+ <%end%>
+ <% for i in @prio3 %>
+ <% cant[2]+=1 %>
+ <%end%>
+ <% for i in @prio4 %>
+ <% cant[3]+=1 %>
+ <%end%>
+ <% for i in @prio5 %>
+ <% cant[4]+=1  %>
+ <%end%>
+ <% for i in @prio6 %>
+ <% cant[5]+=1  %>
+ <%end%>
+ <% for i in @prio7 %>
+ <% cant[6]+=1  %>
+ <%end%>
+ <% for i in @prio8 %>
+ <% cant[7]+=1  %>
+ <%end%>
+ <% for i in @prio9 %>
+ <% cant[8]+=1  %>
+ <%end%>
+ <% for i in @prio10 %>
+ <% cant[9]+=1  %>
+ <%end%>
+
+
+<% cant_t=[0,0,0,0] %>
+<%for t in @types[0] %>
+<% cant_t[0]+=1%>
+<%end%>
+<%for t in @types[1] %>
+<% cant_t[1]+=1%>
+<%end%>
+<%for t in @types[2] %>
+<% cant_t[2]+=1%>
+<%end%>
+<%for t in @types[3] %>
+<% cant_t[3]+=1%>
+<%end%>
+
+<script>
+var w = 400;
+var h = 200;
+var r = h/2;
+var color = d3.scale.category20c();
+var data;//= [{"label":"Category A", "value":20},{"label":"Category B", "value":50}];
+data=[
+<% for i in 0..9 %>
+<% if cant[i]!=0  %>
+ {"label":"prio<%= i +1%>", "value":<%= cant[i] %>},
+<% end %>
+<% end %>]
+
+
+var vis = d3.select('#chart1').append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+var pie = d3.layout.pie().value(function(d){return d.value;});
+
+// declare an arc generator function
+var arc = d3.svg.arc().outerRadius(r);
+
+// select paths, use arc generator to draw
+var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
+arcs.append("svg:path")
+    .attr("fill", function(d, i){
+        return color(i);
+    })
+    .attr("d", function (d) {
+        // log the result of the arc generator to show how cool it is :)
+        console.log(arc(d));
+        return arc(d);
+    });
+
+// add the text
+arcs.append("svg:text").attr("transform", function(d){
+			d.innerRadius = 0;
+			d.outerRadius = r;
+    return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
+    return data[i].label;}
+		);
+
+
+//char2
+var data=[
+<% for i in 0..3 %>
+<% if cant_t[i]!=0  %>
+	<% if i==0 %>
+		<%tipo = "Problem "%>
+		<%elsif i==1 %>
+				<%tipo = "Support "%>
+				<%elsif i==2 %>
+					<%tipo ="Bug " %>
+					<%elsif i==3 %>
+						<%tipo = "Error "%>
+				<%end %>
+ {"label":"<%= tipo%>", "value":<%= cant_t[i] %>},
+<% end %>
+<% end %>]
+
+
+var vis = d3.select('#chart2').append("svg:svg").data([data]).attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(" + r + "," + r + ")");
+var pie = d3.layout.pie().value(function(d){return d.value;});
+
+// declare an arc generator function
+var arc = d3.svg.arc().outerRadius(r);
+
+// select paths, use arc generator to draw
+var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
+arcs.append("svg:path")
+    .attr("fill", function(d, i){
+        return color(i);
+    })
+    .attr("d", function (d) {
+        // log the result of the arc generator to show how cool it is :)
+        console.log(arc(d));
+        return arc(d);
+    });
+
+// add the text
+arcs.append("svg:text").attr("transform", function(d){
+			d.innerRadius = 0;
+			d.outerRadius = r;
+    return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
+    return data[i].label;}
+		);
+ </script>
